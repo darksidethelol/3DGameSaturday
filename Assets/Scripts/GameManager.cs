@@ -1,67 +1,67 @@
-using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager gameManager;
-    [SerializeField] int timeToEnd;
+    public int timeToEnd;
     bool gamePaused = false;
     bool endGame = false;
     bool win = false;
-    // Start is called before the first frame update
+
+    public int redKey = 0;
+    public int greenKey = 0;
+    public int goldKey = 0;
+    public int points = 0;
+    public void FreezTime(int freez)
+    {
+        CancelInvoke("Stopper");
+        InvokeRepeating("Stopper", freez, 1);
+    }
+    public void AddPoints(int point)
+    {
+        points += point;
+    }
+    public void AddTime(int addTime)
+    {
+        timeToEnd += addTime;
+    }
+    public void AddKey(KeyColor color)
+    {
+        if (color == KeyColor.Gold)
+        {
+            goldKey++;
+        }
+        else if (color == KeyColor.Green)
+        {
+            greenKey++;
+        }
+        else if (color == KeyColor.Red)
+        {
+            redKey++;
+        }
+    }
     void Start()
     {
-        if(gameManager == null)
-        {
+       if(gameManager == null)
+       {
             gameManager = this;
-        }
+       }
 
-        InvokeRepeating("Stopper", 2, 1);
-
-        if(timeToEnd <= 0) 
-        {
+       if(timeToEnd <= 0) 
+       {
             timeToEnd = 100;
-        }
+       }
+
+        Debug.Log("Time: " + timeToEnd + " s");
+        InvokeRepeating("Stopper", 2, 1);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        PauseCheck();
-    }
-
-    void Stopper()
-    {
-        timeToEnd--;
-        Debug.Log("Time: " + timeToEnd + "s");
-
-        if(timeToEnd <= 0)
-        {
-            timeToEnd = 0;
-            endGame = true;
-        }
-
-        if(endGame)
-        {
-            EndGame();
-        }
-    }
-
-    public void PauseGame()
-    {
-        Time.timeScale = 0.0f;
-        gamePaused = true;
-    }
-    public void ResumeGame()
-    {
-        Time.timeScale = 1f;
-        gamePaused = false;
-    }
-    void PauseCheck()
-    {
-        if(Input.GetKeyDown(KeyCode.P))
+        PickUpCheck();
+        if (Input.GetKeyDown(KeyCode.P))
         {
             if(gamePaused)
             {
@@ -73,17 +73,56 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    
+    void PickUpCheck()
+    {
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            Debug.Log("Actual Time: " + timeToEnd);
+            Debug.Log("Key red: " + redKey + " green: " + greenKey + " gold: " + goldKey);
+            Debug.Log("Points: " + points);
+        }
+    }
+    void Stopper()
+    {
+        timeToEnd--;
+        Debug.Log("Time: " + timeToEnd + " s");
+        
+        if (timeToEnd <= 0)
+        {
+            timeToEnd = 0;
+            endGame = true;
+        }
+
+        if (endGame)
+        {
+            EndGame();
+        }
+    }
+
+    public void PauseGame()
+    {
+        Debug.Log("Pause Game");
+        Time.timeScale = 0f;
+        gamePaused = true;
+    }
+
+    public void ResumeGame()
+    {
+        Debug.Log("Resume Game");
+        Time.timeScale = 1f;
+        gamePaused = false;
+    }
+
     public void EndGame()
     {
         CancelInvoke("Stopper");
-        if(win)
+        if (win)
         {
-            Debug.Log("YOU WON");
-        }
-        else
+            Debug.Log("You Win!!! Reoad?");
+        } else
         {
-            Debug.Log("YOU LOST");
+            Debug.Log("You Lose!!! Reload?");
         }
     }
+
 }

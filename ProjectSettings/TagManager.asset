@@ -6,6 +6,8 @@ TagManager:
   tags:
   - High
   - Low
+  - Normal
+  - PickUp
   layers:
   - Default
   - TransparentFX
