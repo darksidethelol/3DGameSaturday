@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,9 +15,17 @@ public class GameManager : MonoBehaviour
     public int greenKey = 0;
     public int goldKey = 0;
     public int points = 0;
+
+    AudioSource audioSource;
+    public AudioClip resumeClip;
+    public AudioClip pauseClip;
+    public AudioClip winClip;
+    public AudioClip loseClip;
+    public AudioClip pickUpClip;
     public void FreezTime(int freez)
     {
         CancelInvoke("Stopper");
+        
         InvokeRepeating("Stopper", freez, 1);
     }
     public void AddPoints(int point)
@@ -55,6 +64,7 @@ public class GameManager : MonoBehaviour
        }
 
         Debug.Log("Time: " + timeToEnd + " s");
+        audioSource = GetComponent<AudioSource>();
         InvokeRepeating("Stopper", 2, 1);
     }
 
@@ -65,10 +75,12 @@ public class GameManager : MonoBehaviour
         {
             if(gamePaused)
             {
+                PlayClip(resumeClip);
                 ResumeGame();
             }
             else
             {
+                PlayClip(pauseClip);
                 PauseGame();
             }
         }
@@ -118,11 +130,19 @@ public class GameManager : MonoBehaviour
         CancelInvoke("Stopper");
         if (win)
         {
-            Debug.Log("You Win!!! Reoad?");
+            PlayClip(winClip);
+            Debug.Log("You won! Reload?");
         } else
         {
-            Debug.Log("You Lose!!! Reload?");
+            PlayClip(loseClip);
+            Debug.Log("You lost. Reload?");
         }
     }
-
+    public void PlayClip(AudioClip playClip)
+    {
+        audioSource.clip = playClip;
+        audioSource.Play();
+        
+    }
+    
 }

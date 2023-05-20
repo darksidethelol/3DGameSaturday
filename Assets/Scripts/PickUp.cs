@@ -11,6 +11,7 @@ public class PickUp : MonoBehaviour
     public virtual void Picked()
     {
         Debug.Log("Picked up");
+        GameManager.gameManager.PlayClip(GameManager.gameManager.pickUpClip);
         Destroy(this.gameObject);
     }
     public void Rotation()

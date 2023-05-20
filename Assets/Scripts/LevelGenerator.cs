@@ -57,15 +57,15 @@ public class LevelGenerator : MonoBehaviour
             {
                 foreach (Transform grandchild in child.transform)
                 {
-                    if (child.tag == "Wall")
+                    if (grandchild.tag == "Wall")
                     {
                         if (Random.Range(1, 100) % 3 == 0)
                         {
-                            child.gameObject.GetComponent<Renderer>().material = material01;
+                            grandchild.gameObject.GetComponent<Renderer>().material = material01;
                         }
                         else
                         {
-                            child.gameObject.GetComponent<Renderer>().material = material02;
+                            grandchild.gameObject.GetComponent<Renderer>().material = material02;
                         }
                     }
                 }
